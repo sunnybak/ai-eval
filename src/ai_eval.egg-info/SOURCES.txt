@@ -1,0 +1,11 @@
+LICENSE
+README.md
+pyproject.toml
+setup.py
+src/ai-eval/__init__.py
+src/ai-eval/example.py
+src/ai_eval.egg-info/PKG-INFO
+src/ai_eval.egg-info/SOURCES.txt
+src/ai_eval.egg-info/dependency_links.txt
+src/ai_eval.egg-info/requires.txt
+src/ai_eval.egg-info/top_level.txt

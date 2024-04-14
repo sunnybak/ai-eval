@@ -1,0 +1,26 @@
+Metadata-Version: 2.1
+Name: ai-eval
+Version: 0.0.1
+Summary: The Evaluation SDK for LLM apps
+Author: HoneyHive
+Author-email: support@honeyhive.ai
+License: Apache License 2.0
+Project-URL: Documentation, https://docs.honeyhive.ai/
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Natural Language :: English
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Python: >= 3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Provides-Extra: dev
+Requires-Dist: pylint==2.16.2; extra == "dev"
+
+# ai-eval
