@@ -32,4 +32,4 @@ class HappinessDetectionEval(GuardrailEvaluator):
 
     @property
     def __name__(self):
-        return "Policy Violation Detection Guardrail Evaluator"
+        return "Happiness Detection Guardrail Evaluator"
