@@ -1,5 +1,6 @@
 from openai import OpenAI
 import json
+import tiktoken
 
 # TODO: integrate with LangChain
 
@@ -37,3 +38,17 @@ def openai_call(model='gpt-3.5-turbo', prompt=None):
         ],
     )
     return completion.choices[0].message.content
+
+def token_encoder(decoded=None):
+    if decoded is None:
+        raise ValueError("prompt must be provided")
+    
+    enc = tiktoken.get_encoding("cl100k_base")
+    return enc.encode(decoded)
+
+def token_decoder(encoded=None):
+    if encoded is None:
+        raise ValueError("encoded must be provided")
+    
+    enc = tiktoken.get_encoding("cl100k_base")
+    return enc.decode(encoded)

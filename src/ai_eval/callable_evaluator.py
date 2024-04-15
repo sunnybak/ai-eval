@@ -4,8 +4,8 @@ from abc import ABC, abstractmethod
 class CallableEvaluator(ABC):
     
     @abstractmethod
-    def evaluate(self, *args, **kwargs):
+    def score(self, *args, **kwargs):
         raise NotImplementedError("evaluate method must be implemented")
     
     def __call__(self, *args, **kwargs):
-        return self.evaluate(*args, **kwargs)
+        return self.score(*args, **kwargs)

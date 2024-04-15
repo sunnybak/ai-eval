@@ -1,38 +1,22 @@
 from abc import ABC, abstractmethod
-from typing import Optional, Tuple
-from ai_eval.scorers.callable_evaluator import CallableEvaluator
+from ai_eval.callable_evaluator import CallableEvaluator
 from ai_eval.eval_result import EvalResult
-from typing import Optional, Tuple, Union, Callable, List
+from ai_eval.types import ThresholdType, ScoreType, CallableEvaluatorType
+from typing import Optional, Union, Callable
 
-ThresholdType = Union[
-    # primitive types
-    bool, 
-    int,
-    float,
-    str,
-    
-    # list of strings
-    Tuple[str, ...],
-    
-    # numeric ranges
-    Tuple[float, float], 
-    Tuple[int, float],
-    Tuple[float, int],
-    Tuple[int, int]
-]
 
 class BaseEvaluator(ABC):
     
     model: Optional[str] = None
     threshold: ThresholdType
-    scorer: Optional[Callable] | CallableEvaluator
+    scorer: Optional[CallableEvaluatorType]
     
-    score: Optional[Union[float, int, str, bool]] = None
+    score: Optional[ScoreType] = None
 
     def __init__(self, 
-                 threshold: ThresholdType = (0.5, 1), 
+                 threshold: ThresholdType = True, 
                  model: str = 'gpt-3.5-turbo', 
-                 scorer: Optional[Callable] = None
+                 scorer: Optional[CallableEvaluatorType] = None
                 ):
         if scorer is None or \
             not (callable(scorer) or issubclass(scorer.__class__, CallableEvaluator)):
@@ -42,7 +26,10 @@ class BaseEvaluator(ABC):
         self.model = model
         self.scorer = scorer
     
-    def check_threshold(self, score: Union[float, int, str, bool]) -> bool:
+    def default_scorer(self, *args):
+        raise NotImplementedError("Subclasses must implement default_scorer method")
+    
+    def check_threshold(self, score: ScoreType) -> bool:
         eval_result = EvalResult()
         eval_result.evaluation_model = self.model
         eval_result.score = score
@@ -69,5 +56,5 @@ class BaseEvaluator(ABC):
         return eval_result
     
     @abstractmethod
-    def __call__(self, test_case: str):
+    def __call__(self, *args, **kwargs) -> EvalResult:
         raise NotImplementedError("Subclasses must implement __call__ method")

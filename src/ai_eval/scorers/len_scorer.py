@@ -1,4 +1,4 @@
-from ai_eval.scorers.callable_evaluator import CallableEvaluator
+from ai_eval.callable_evaluator import CallableEvaluator
 
 class StringLengthScore(CallableEvaluator):
     def evaluate(self, string) -> int:

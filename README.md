@@ -12,3 +12,7 @@ Label Free Evaluators
 With Label Evaluators
 - Answer Correctness
 - Context Correctness
+
+
+ideas:
+- decorator on evaluator method to aggregate results
