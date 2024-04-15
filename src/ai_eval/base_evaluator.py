@@ -29,7 +29,11 @@ class BaseEvaluator(ABC):
     
     score: Optional[Union[float, int, str, bool]] = None
 
-    def __init__(self, threshold: ThresholdType = (0.5, 1), model: str = 'gpt-3.5-turbo', scorer: Optional[Callable] = None):
+    def __init__(self, 
+                 threshold: ThresholdType = (0.5, 1), 
+                 model: str = 'gpt-3.5-turbo', 
+                 scorer: Optional[Callable] = None
+                ):
         if scorer is None or \
             not (callable(scorer) or issubclass(scorer.__class__, CallableEvaluator)):
             raise ValueError("scorer must be a defined function or a subclass of CallableEvaluator")

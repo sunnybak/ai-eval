@@ -4,8 +4,8 @@ from ai_eval.eval_result import EvalResult
 class GuardrailEvaluator(BaseEvaluator):
 
     # GuardrailEvaluator calls only take the test_case param
-    def __call__(self, test_case: str):
-        eval_result = self.scorer(test_case)
+    def __call__(self, test_case: str, *args, **kwargs):
+        eval_result = self.scorer(test_case, *args, **kwargs)
         checked_threshold = super().check_threshold(eval_result)
         return checked_threshold
     

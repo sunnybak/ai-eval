@@ -29,3 +29,6 @@ class EvalResult(object):
     
     def __ne__(self, value: object) -> bool:
         return self.score != value
+    
+    def __str__(self) -> str:
+        return f"Score: {self.score}, Success: {self.success}"
