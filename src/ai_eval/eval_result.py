@@ -1,11 +1,10 @@
-from typing import Dict, Optional
-from ai_eval.types import ScoreType
+from typing import Dict, Optional, Union
+
+ScoreType = Union[float, int, str, bool]
 
 class EvalResult(object):
     score: Optional[ScoreType] = None
     score_breakdown: Optional[Dict] = None 
-    # [True, "happy", ..]
-    # [True, False, ..]
 
     success: Optional[bool] = None
     reason: Optional[str] = None
@@ -39,5 +38,17 @@ class EvalResult(object):
     def __ne__(self, value: object) -> bool:
         return self.score != value
     
+    def __mul__(self, value: object) -> object:
+        return self.score * value
+
+    def __rmul__(self, value: object) -> object:
+        return self.score * value    
+    
     def __str__(self) -> str:
         return f"Score: {self.score}, Success: {self.success}"
+
+    def to_json(self) -> Dict:
+        return {
+            'score': self.score,
+            'success': self.success,
+        }

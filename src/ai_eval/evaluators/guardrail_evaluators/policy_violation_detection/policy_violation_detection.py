@@ -1,4 +1,4 @@
-from ai_eval.guardrail_evaluators import GuardrailEvaluator
+from ai_eval.evaluators.guardrail_evaluators import GuardrailEvaluator
 from ai_eval.eval_result import EvalResult
 from ai_eval.util import openai_evaluator
 

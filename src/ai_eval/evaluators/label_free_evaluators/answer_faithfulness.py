@@ -1,6 +1,5 @@
-from ai_eval.base_evaluator import BaseEvaluator
+from ai_eval.evaluators.base_evaluator import BaseEvaluator
 from ai_eval.eval_result import EvalResult
-from ai_eval.types import ScoreType
 from typing import List
 
 class AnswerFaithfulnessEvaluator(BaseEvaluator):
@@ -12,11 +11,11 @@ class AnswerFaithfulnessEvaluator(BaseEvaluator):
         eval_result = self.scorer(user_input, model_answer, retrieved_context, **scorer_kwargs)
         
         # evaluated result
-        checked_threshold = self.check_threshold(eval_result)
+        checked_threshold = self.check_threshold(self.threshold, eval_result)
 
         return checked_threshold
     
-    def default_scorer(self, user_input: str, model_answer: str, retrieved_context: List[str], **scorer_kwargs) -> ScoreType:
+    def default_scorer(self, user_input: str, model_answer: str, retrieved_context: List[str], **scorer_kwargs):
         return user_input + ''.join(retrieved_context) == model_answer
     
     def __init__(self, threshold=0.5, model='gpt-3.5-turbo', scorer=None) -> None:
