@@ -2,8 +2,6 @@ from openai import OpenAI
 import json
 import tiktoken
 
-# TODO: integrate with LangChain
-
 def openai_evaluator(model='gpt-3.5-turbo', eval_prompt=None):
 
     if eval_prompt is None:
