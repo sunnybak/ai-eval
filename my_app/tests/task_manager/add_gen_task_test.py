@@ -53,8 +53,7 @@ target = Target(target_range=['happy', 'sad'], in_range=in_range)
     test_cases=[
         # (generator, scorer, target)
         (generator_add_gen, scorer_add_gen, target),
-        ('buy me dinner', scorer_add_gen, target),
-        # (generator_add_gen, scorer_add_gen, target, [grubhub_api, doordash_api]),
+
     ],
 ))
 def test_add_gen_tasks(test_case):

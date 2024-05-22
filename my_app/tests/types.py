@@ -1,9 +1,11 @@
-class TestCase(object):
+from typing import Any, List
 
-    def __init__(self, generator, scorer, target):
+class TestCase(object):
+    def __init__(self, generator, scorer, evaluator, kwargs):
         self.generator = generator
         self.scorer = scorer
-        self.target = target
+        self.evaluator = evaluator
+        self.kwargs = kwargs
 
 class Dataset(object):
     def __init__(self, test_cases):
@@ -14,32 +16,56 @@ class Dataset(object):
     def __iter__(self):
         for test_case in self.test_cases:
             yield test_case
+            
+class Score(object):
+    def __init__(self, score, scorer_args, scorer_kwargs):
+        self.score = score
+        self.scorer_args = scorer_args
+        self.scorer_kwargs = scorer_kwargs
 
-# stores the target score for evaluation
-# implements the __contains__ method to check if the  is within the target
-class Target(object):
-    def __init__(self, target_range=[True], in_range=None):
-
-        self.target_range = target_range
-        self.custom_range = in_range is not None
-        if self.custom_range:
-            self._contains = lambda score: in_range(self.target_range, score)
-        else:
-            self._contains = self.target_range.__contains__
-
-    def __contains__(self, score):
-        if self.custom_range:
-            val = self._contains(score)
-            return val
-
-        if not hasattr(score, '__iter__'):
-            score = (score,)
-
-        return self._contains(score)
-
-    def __eq__(self, value: object) -> bool:
-        return value == self.target_range
+    def __float__(self):
+        return float(self.score)
+    
+    def __add__(self, other):
+        if isinstance(other, Score) or isinstance(other, (int, float)):
+            return float(self) + float(other)
+        return NotImplemented
+    
+    def __radd__(self, other):
+        return self.__add__(other)
     
     def __repr__(self):
-        return f'{self.target_range}'
+        return f'{self.score}'
+
+# this contains a list of scores
+class BatchScore(object):
+    def __init__(self, scores: List[Score]):
+        self.scores = scores
+
+# eval = Evaluator([0.7, 1], lambda pass_range, score: pass_range[0] <= score <= pass_range[1])    
+# eval(0.8) -> True
+# eval(0.6, [0.3, 0.7]) -> True
+# eval.in_range(0.6, [0.3, 0.7]) -> True
+# 0.6 in eval.pass_range -> True
+
+# if in_range is not provided, it defaults to lambda score: score == pass_range
+# eval = Evaluator(pass_range=0.5)
+# eval(0.5) -> True
+
+# if pass_range is not provided, it defaults to True
+# eval = Evaluator(in_range=lambda score: score == 1)
+# eval(1) -> True
+class Evaluator(object):
+    def __init__(self, pass_range=None, in_range=None):
+        self._pass_range = pass_range or True
+        self._in_range = in_range or self._default_in_range
     
+    # default in case in_range is not provided
+    def _default_in_range(self, score):
+        return score == self._pass_range
+
+    def __call__(self, scores, *args: Any, **kwds: Any) -> Any:
+        return self._in_range(self._pass_range, scores, *args, **kwds)
+    
+    def __repr__(self) -> str:
+        return f'{self._pass_range}'

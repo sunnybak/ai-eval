@@ -6,6 +6,8 @@ import functools
 import asyncio
 import pandas as pd
 import numpy as np
+from typing import List, Dict
+from my_app.tests.types import Score
 
 def openai_call(prompt=None, model='gpt-3.5-turbo', response_format=None):
     if prompt is None:
@@ -59,37 +61,18 @@ def async_score(consistency=3, models=['gpt-3.5-turbo']):
         @functools.wraps(scorer)
         def wrapper(test_case):
             async def run_tests():
-                df = pd.DataFrame(columns=models)
+                model_score_dict: Dict[str, List[Score]] = {}
                 for model in models:
                     print(f'\nRunning {consistency} tests using {model}.')
                     tasks = [asyncio.create_task(scorer(i, test_case, model)) for i in range(consistency)]
                     model_scores = await asyncio.gather(*tasks)
-                    df[model] = model_scores
-                return df
+                    model_score_dict[model] = model_scores
+                return model_score_dict
             return asyncio.run(run_tests())
         return wrapper
     return decorator
 
 
-class Score(object):
-    def __init__(self, score, scorer_args, scorer_kwargs):
-        self.score = score
-        self.scorer_args = scorer_args
-        self.scorer_kwargs = scorer_kwargs
-
-    def __float__(self):
-        return float(self.score)
-    
-    def __add__(self, other):
-        if isinstance(other, Score) or isinstance(other, (int, float)):
-            return float(self) + float(other)
-        return NotImplemented
-    
-    def __radd__(self, other):
-        return self.__add__(other)
-    
-    def __repr__(self):
-        return f'{self.score}'
 
 # scorer decorator to monitor the inputs and outputs of the scorer
 def scorer(score_func):
