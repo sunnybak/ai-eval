@@ -29,6 +29,7 @@ to setup a test, we need to define 3 things:
 
 ## what's next? 
 features
+- [ ] optimal stopping policy
 - [ ] versioning based on repo hash & git hash
 - [ ] historical scores visualization
 - [ ] mock tool calling servers 

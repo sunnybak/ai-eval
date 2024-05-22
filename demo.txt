@@ -1,0 +1,22 @@
+1. 3 min - quick intro to ai-eval + why ai-eval
+2. 2 min - jump into code_suggester example
+
+3. 5 min - describe fixed test
+- describe what the generator is
+- describe what the scorer is
+- describe what the evaluator is
+- point out the consistency parameter - start low..
+RUN IT!
+
+4. 3 min - prompt iteration experience
+- increase consistency
+- change prompt
+- run it again
+
+5. 3 min - model experimentation
+- set multiple models
+- run it again
+
+6. next steps
+- talk about roadmap
+- optimal stopping, etc
