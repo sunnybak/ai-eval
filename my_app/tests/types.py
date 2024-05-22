@@ -1,5 +1,6 @@
 from typing import Any, List
-
+import pickle
+import hashlib
 class TestCase(object):
     def __init__(self, generator, scorer, evaluator, kwargs):
         self.generator = generator
@@ -36,6 +37,7 @@ class Score(object):
     
     def __repr__(self):
         return f'{self.score}'
+    
 
 # this contains a list of scores
 class BatchScore(object):
@@ -59,13 +61,35 @@ class Evaluator(object):
     def __init__(self, pass_range=None, in_range=None):
         self._pass_range = pass_range or True
         self._in_range = in_range or self._default_in_range
+        self._result = None
+        self._hash = None
     
     # default in case in_range is not provided
     def _default_in_range(self, score):
         return score == self._pass_range
 
     def __call__(self, scores, *args: Any, **kwds: Any) -> Any:
-        return self._in_range(self._pass_range, scores, *args, **kwds)
+        result =  self._in_range(self._pass_range, scores, *args, **kwds)
+        self._result = (scores, result)
+        return result
+    
+    def pickle(self):
+        path = '../evals'
+        # get the abs path and then hash the given path
+        # make sure to encode recursively all the files in the path
+        hash = hashlib.sha256(path.encode()).hexdigest()
+        self._hash = hash
+
+        # pickle this object and store it in a dir
+        with open('../evals/results/', 'wb') as f:
+            pickle.dump(self, f)
+
+    # eval = Evaluator.unpickle(file_path)
+    @classmethod
+    def unpickle(self, path):
+        path = '../evals/results/rick.pickle'
+        with open(path, 'rb') as f:
+            return pickle.load(f)
     
     def __repr__(self) -> str:
         return f'{self._pass_range}'
