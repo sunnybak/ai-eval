@@ -1,0 +1,28 @@
+tests folder has everything
+- [ ] detach the app from the sdk
+
+Sunny
+target > evaluators
+tests
+
+0. CLI command
+1. Tests folder structure mapping
+2. Tests folder config yaml properties (dnb)
+3. Run all tests within
+4. Populate results into pickle rick
+5. Displaying results - DOM inside python
+    1. Logging chats from unsuccessful runs
+    2. maybe charts
+
+Milestone:
+aieval run tests 
+- what happens?
+- design discuss & build results (pickle rick)
+output: rick.pkl
+
+objective
+- ai eval demo for ny ticket:
+- - charts ppl like:
+1. passing% over runs on a test
+2. histogram grouped by model
+3. pretty printed failed chats
