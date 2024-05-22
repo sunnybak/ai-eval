@@ -1,66 +1,41 @@
 # ai-eval
 
-Guardrail Evaluators
-- Prompt Injection Detection
-- Model Policy Violation Detection
+## what is ai-eval?
+`ai-eval` is a pytest-wrapper that allows you to simulate & evaluate your AI applications.
 
-Label Free Evaluators
-- Context Relevance
-- Answer Relevance
-- Answer Faithfulness
+## why build ai-eval?
+there are many LLM eval frameworks that are already out there.
+so why are we building another one?
+1. **extensibility**
 
-With Label Evaluators
-- Answer Correctness
-- Context Correctness
+frameworks like RAGAS and LlamaIndex don't allow much customization or composition on the threadpooling / building own metrics. They want you to use their own out of the box evals
 
+2. **simplicity**
 
-ideas:
-- decorator on evaluator method to aggregate results
+most eval SDKs are too strictly typed and require a lot of boilerplate to get started. We want to make it as easy as possible to get started with AI evals
 
-The GenericScorer class has 2 key hyperparams
-1. raw score (ScoreType)
-2. norm score (ThresholdType)
-When called with any arbitrary* input, they compute the
-raw score and normalized score and return it
+3. **usefulness**
 
-The input must be of the shape
-- test_case (guardrail)
+no one has simple utilities like concurrency, trajectory test cases, or rate limiting.
+everyone assumes the evaluators & apps are deterministic, & single data points are good enough. But in reality,
+you will need statistical analysis to make any claims
 
-- user_input, model_answer
-- user_input, retrieved_context
-- user_input, retrieved_context, model_answer
+## how to use ai-eval?
 
-- model_answer, golden_answer
-- retrieved_context, golden_context
+to setup a test, we need to define 3 things:
+- **generator**: a function that generates the input data
+- **scorer**: a function that scores the output data
+- **evaluator**: a function that checks if the scores are in your target range
 
-The actual parameters can be an object of any type.
-The scorer returns a ScoreType object
-The ScoreType is passed into the normalizer
-The output of the normalizer is always of the type ThresholdType
-This is so that the ThresholdTypes can be compared effectively
-The default normalizer is simply the raw_score (assuming it is of ThresholdType)
+## what's next? 
+features
+- [ ] versioning based on repo hash & git hash
+- [ ] historical scores visualization
+- [ ] mock tool calling servers 
+- [ ] more templated scorers, evaluators, generators
+- [ ] support for multiple models
 
-
-The GenericEvaluator class has 2 key hyperparams
-1. threshold (ThresholdType)
-2. eval (func)
-When called, they evaluate 2 ThresholdTypes
-A custom evaluator can do advanced comparisons and checks between thresholds
-
-scorer(EvalType) -> ScoreType 
-normalizer(ScoreType) -> ThresholdType
-evaluate(ThresholdType, ThresholdType) -> EvalResult
-
-
-core framework
-[] testing abstractions (concurrency, rate limits, consistency, dataset)
-[] evaluators and scorers 
-[] pipeline support (chat, agent, RAG)
-
-
-[] examples, cookbooks, best practices, documentation
-[] metrics and reports
-
-
-[] model support
+docs
+- [ ] examples, cookbooks, best practices, documentation
+- [ ] metrics and reports
 
