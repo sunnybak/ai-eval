@@ -1,0 +1,3 @@
+pytest
+openai
+rouge_score

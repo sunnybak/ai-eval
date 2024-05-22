@@ -1,6 +1,5 @@
 from openai import OpenAI
 import tiktoken
-import sacrebleu
 from rouge_score import rouge_scorer
 
 import functools
