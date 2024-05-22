@@ -2,20 +2,39 @@
 2. 2 min - jump into code_suggester example
 
 3. 5 min - describe fixed test
+
 - describe what the generator is
+- - seeding
+- - fixed trajectory generator quick description
+- - synth trajectory generator quick description
+
 - describe what the scorer is
+- - make sure to mention FULLY CUSTOMIZABLE, plz use whatever u want
+
 - describe what the evaluator is
+- - pass_range & in_range functions
+- - just checks that the score is in your "range" which is FULLY CUSTOMIZABLE
+
 - point out the consistency parameter - start low..
-RUN IT!
+- - evaluator might be non-determ, generator might be non-determ, app is definitely non-determ
+- - more non-determ -> more need for consistency check
 
 4. 3 min - prompt iteration experience
 - increase consistency
 - change prompt
 - run it again
 
+the triangle philosophy 
+- evaluator -> app -> dataset -> evaluator
+- don't game the test, if the system is breaking.. fix the system
+- be very sure if you are changing the evaluator
+- versioning is important!
+
 5. 3 min - model experimentation
 - set multiple models
 - run it again
+
+(Optional section: synth generator depending on time left)
 
 6. next steps
 - talk about roadmap

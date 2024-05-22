@@ -6,9 +6,10 @@
 ## why build ai-eval?
 there are many LLM eval frameworks that are already out there.
 so why are we building another one?
+
 1. **extensibility**
 
-frameworks like RAGAS and LlamaIndex don't allow much customization or composition on the threadpooling / building own metrics. They want you to use their own out of the box evals
+most eval frameworks don't allow much customization or composition on the threadpooling / building own metrics. They want you to use their own out of the box evals
 
 2. **simplicity**
 
@@ -17,8 +18,8 @@ most eval SDKs are too strictly typed and require a lot of boilerplate to get st
 3. **usefulness**
 
 no one has simple utilities like concurrency, trajectory test cases, or rate limiting.
-everyone assumes the evaluators & apps are deterministic, & single data points are good enough. But in reality,
-you will need statistical analysis to make any claims
+everyone assumes the evaluators & apps are deterministic, & single data points are good enough. 
+in reality, you will need statistical analysis to make any claims
 
 ## how to use ai-eval?
 
@@ -35,6 +36,7 @@ features
 - [ ] mock tool calling servers 
 - [ ] more templated scorers, evaluators, generators
 - [ ] support for multiple models
+- [ ] typescript version
 
 docs
 - [ ] examples, cookbooks, best practices, documentation
