@@ -16,9 +16,9 @@ class BaseDataset(ABC):
         self.generator = generator
 
 class StaticDataset(BaseDataset):
-    file_data: List[Dict[str, Any]] = []
+    file_data: List[Any] = []
 
-    def __init__(self, data: List[Dict[str, Any]] = []):
+    def __init__(self, data: List[Any] = []):
         self.file_data = data
         super().__init__(
             fixed_schema=True,
