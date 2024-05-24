@@ -51,7 +51,6 @@ def token_rouge(string_a, string_b):
     scores = scorer.score(string_a, string_b)
     return scores['rougeL'].precision
 
-
 # consistency=20, # number of repetitions
 # TODO: batch_size for number of tests to run in parallel
 # models=['gpt-3.5-turbo', 'gpt-4', 'gpt-4o'], # models to sweep
@@ -64,7 +63,7 @@ def async_score(consistency=3, models=['gpt-3.5-turbo']):
                 model_score_dict: Dict[str, List[Score]] = {}
                 for model in models:
                     print(f'\nRunning {consistency} tests using {model}.')
-                    tasks = [asyncio.create_task(scorer(i, test_case, model)) for i in range(consistency)]
+                    tasks = [asyncio.create_task(scorer(test_case, model)) for i in range(consistency)]
                     model_scores = await asyncio.gather(*tasks)
                     model_score_dict[model] = model_scores
                 return model_score_dict
@@ -72,6 +71,64 @@ def async_score(consistency=3, models=['gpt-3.5-turbo']):
         return wrapper
     return decorator
 
+import asyncio
+from typing import Dict, List
+import itertools
+import pandas as pd
+
+def batch_eval(test_function, args, hyperparam_dict: Dict[str, List], consistency=3):
+    async def run_tests():
+        
+        # assert that the hyperparam_dict keys are all strings and values are lists
+        assert all([isinstance(k, str) for k in hyperparam_dict.keys()])
+        assert all([isinstance(v, list) for v in hyperparam_dict.values()])
+        
+        # get the cartesian product of all hyperparam ranges
+        hyperparam_kwargs = [dict(zip(hyperparam_dict, x)) for x in itertools.product(*hyperparam_dict.values())]
+        print("Hyperparam kwargs:", hyperparam_kwargs)
+
+        score_tasks = []
+        results = []
+        for hyper_combo in hyperparam_kwargs:
+            result = {}
+            
+            # populate the args
+            for i, arg in enumerate(args):
+                result['arg_' + str(i)] = arg
+            
+            # populate the hyperparams
+            for key, value in hyper_combo.items():
+                result[key] = value
+
+            results.append(result)
+            score_tasks.extend([asyncio.create_task(test_function(*args, **hyper_combo)) for _ in range(consistency)])
+
+        print("Total number of tests:", len(score_tasks))
+
+        # Wait for all tasks to complete
+        scores = await asyncio.gather(*score_tasks)
+        
+        batched_scores = []
+        batch = []
+        for i, score in enumerate(scores):
+            score_obj = score if isinstance(score, Score) else Score(score)
+            batch.append(score_obj)
+            if len(batch) == consistency:
+                batched_scores.append(batch)
+                batch = []
+
+        ret_results = []
+        assert len(results) == len(batched_scores)
+        for result, score_batch in zip(results, batched_scores):
+            score_dict = {'score': [], 'scorer_args': [], 'scorer_kwargs': []}
+            for score in score_batch:
+                score_dict['score'].append(score.score)
+                score_dict['scorer_args'].append(score.scorer_args)
+                score_dict['scorer_kwargs'].append(score.scorer_kwargs)
+            ret_results.append(dict(result, **score_dict))
+        return pd.DataFrame(ret_results)
+    
+    return asyncio.run(run_tests())
 
 
 # scorer decorator to monitor the inputs and outputs of the scorer

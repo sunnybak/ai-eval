@@ -7,7 +7,7 @@ from typing import List, Dict
 import pytest
 from my_app import task_manager_backend as backend
 from my_app.tests.types import Dataset, Evaluator, Score
-from my_app.tests.util import async_score, scorer
+from my_app.tests.util import batch_eval, scorer
 import numpy as np
 
 
@@ -17,16 +17,16 @@ seed_trajectory = [
         "add task 4",
         "add task 5",
     ],
-    [
-        "[] task 1 [x] go to supermarket [] beep boop",
-        "addition task 4",
-        "add task 5",
-    ],
-    [
-        "[] task 1 [x] go to supermarket [] beep boop",
-        "add task 4",
-        "add task 5",
-    ],
+    # [
+    #     "[] task 1 [x] go to supermarket [] beep boop",
+    #     "addition task 4",
+    #     "add task 5",
+    # ],
+    # [
+    #     "[] task 1 [x] go to supermarket [] beep boop",
+    #     "add task 4",
+    #     "add task 5",
+    # ],
 ]
 
 scorer_checks = [
@@ -71,8 +71,8 @@ def scorer_add_fixed(messages, scorer_checks) -> bool:
 # target = 0.7 <= avg(correctness) < 1.0
 eval = Evaluator(0.7, lambda pass_range, score: pass_range < np.mean(score) <= 1.0)
 
-@async_score(consistency=10, models=["gpt-3.5-turbo", "gpt-4"])
-async def score_test_case(i, test_case, model) -> bool:
+
+async def score_test_case(test_case, model) -> bool:
     seed_trajectory, scorer_checks = test_case
     
     # backend = Backend(configuration)
@@ -96,36 +96,9 @@ async def score_test_case(i, test_case, model) -> bool:
             messages, {"role": "assistant", "content": llm_response}
         )
 
-    print(f"\tCompleted async consistency rep {i+1}.")
-
     # score the trajectory
     score = scorer_add_fixed(messages, scorer_checks)
     return score
-
-
-# @pytest.mark.parametrize(
-#     ("test_case, configuration, scorers"),
-#     [
-#        ((seed_trajectory[i], scorer_checks[i]),(prompt[j], chunk_size[j]),(scorers[k], evals[k])) for i in range(len(seed_trajectory))
-#     ],
-# )
-# class TestGroup:
-#     def test_faithfulness(self, test_case):
-#         pass
-
-
-# @pytest.mark.parametrize(
-#     ("test_case, configuration"),
-#     [
-#        ((seed_trajectory[i], scorer_checks[i]),(prompt[j], chunk_size[j])) for i in range(len(seed_trajectory))
-#     ],
-# )
-# class TestGroup:
-#     def test_faithfulness(self, test_case):
-#         pass
-
-#     def test_honesty(self, test_case):
-#         pass
 
 
 @pytest.mark.parametrize(
@@ -138,17 +111,14 @@ class TestGroup:
 
     def test_add_fixed_tasks(self, test_case): 
 
-        batch_scores: Dict[str, List[Score]] = score_test_case(test_case)
-        print("Scores:\n", batch_scores)
-        
-        # evaluate the scores for each key in the batch
-        result_df = {}
-        for model, scores in batch_scores.items():
-            result_df[model] = eval(scores)
-        print("Results:\n", result_df)
+        scores_df = batch_eval(test_function=score_test_case, 
+                               args=(test_case,), 
+                               hyperparam_dict={'model': ['gpt-3.5-turbo', 'gpt-4']}, 
+                               consistency=2)
 
-    def test_add_grammatical_error_tasks():
-        pass
+        scores_df['result'] = scores_df['score'].apply(eval)
+        
+        print(scores_df[['model', 'score', 'result']])
 
 # test cases - regression, unittests
 #   iterating: trajectories, generators

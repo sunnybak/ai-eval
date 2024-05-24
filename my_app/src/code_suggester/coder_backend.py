@@ -1,17 +1,22 @@
 from openai import AsyncOpenAI, OpenAI
 
-SYSTEM_PROMPT = """
+SYSTEM_PROMPTS = [
+    """
     You are a coding assistant. The user will instruct you to write Python code snippets.
     Make sure you follow the user's instructions explicitly and provide the correct Python code.
     The Python code MUST be executable.
-"""
+    """,
+    """
+    You are a coding assistant.
+    """,
+]
 
 client = OpenAI(api_key="sk-proj-Gxa6OeFmoePlz04nf33ST3BlbkFJ00amYaRJhwF7gE0pVLve")
 aclient = AsyncOpenAI(api_key="sk-proj-Gxa6OeFmoePlz04nf33ST3BlbkFJ00amYaRJhwF7gE0pVLve")
 
 
-def get_init_messages():
-    return [{"role": "system", "content": SYSTEM_PROMPT}]
+def get_init_messages(sys_prompt_version=0):
+    return [{"role": "system", "content": SYSTEM_PROMPTS[sys_prompt_version]}]
 
 def add_message(messages, message):
     messages.append(message)

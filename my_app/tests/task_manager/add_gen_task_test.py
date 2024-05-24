@@ -2,16 +2,15 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
 
-from typing import List, Dict
+from my_app.evals.evaluators.rouge_eval import mean_rouge_eval
+from my_app.evals.scorers.rouge_scorer import scorer_add_gen
 from my_app import task_manager_backend as backend
-from my_app.tests.types import Dataset, Target
-from my_app.tests.util import openai_call, token_rouge, async_score, scorer
-import pytest
+from my_app.tests.util import openai_call, token_rouge, batch_eval, scorer
 import json
 
 
 # generates a new user message or None to terminate
-def generator_add_gen(messages):
+def generator_add_gen(messages, back_and_forth=3):
     SYNTH_USER_PROMPT = """
         Write a very short instruction (few words) for a task manager assistant to add a task to a list of tasks.
         For example, "add implement AI eval" or "I need to deploy fixes".
@@ -22,8 +21,8 @@ def generator_add_gen(messages):
     """
     model = 'gpt-4o'
     
-    # 3 back and forths
-    if (len(messages) - 1) // 2 < 3:
+    # back and forths
+    if (len(messages) - 1) // 2 < back_and_forth:
         task_instr_json = openai_call(
                             SYNTH_USER_PROMPT, 
                             model,
@@ -31,62 +30,49 @@ def generator_add_gen(messages):
         return json.loads(task_instr_json)
     return None
 
-# score = average rougeness of the generated tasks
-@scorer
-def scorer_add_gen(messages, tasks=None) -> float:
-    if tasks is None: return True
-    final_answer = messages[-1]['content'].lower()
-    rouge_scores = []
-    for task in tasks:
-        score = token_rouge(final_answer, '[] ' + task)
-        rouge_scores.append(score)
-    return sum(rouge_scores)/len(rouge_scores)
-
-# target = 0.7 <= avg(rouge) < 1.0
-def in_range(range, scores):
-    return range < sum(scores)/len(scores) <= 1.0
-
-target = Target(target_range=['happy', 'sad'], in_range=in_range)
-
-
-@pytest.mark.parametrize("test_case", Dataset(
-    test_cases=[
-        # (generator, scorer, target)
-        (generator_add_gen, scorer_add_gen, target),
-
-    ],
-))
-def test_add_gen_tasks(test_case):
-
-    @async_score(consistency=10, models=['gpt-3.5-turbo', 'gpt-4'])
-    async def run_score_test_case(i, test_case, model):
-        # initialize messages
-        messages = backend.get_init_messages()
+async def run_score_test_case(_, model, back_and_forth=3, prompt_version=0):
+    # initialize messages
+    messages = backend.get_init_messages(prompt_version)
+    
+    # chat simulation 
+    task_instr_json = generator_add_gen(messages, back_and_forth)
+    user_msg = task_instr_json['instruction']
+    tasks = [task_instr_json['task']]
+    while user_msg is not None:
+        backend.add_message(messages, {"role": "user", "content": user_msg})
+        llm_response = await backend.a_get_llm_message(messages, model=model, stream=False)
         
-        # chat simulation 
-        task_instr_json = test_case.generator(messages)
+        backend.add_message(messages, {"role": "assistant", "content": llm_response})
+        task_instr_json = generator_add_gen(messages, back_and_forth)
+        if task_instr_json is None: break
         user_msg = task_instr_json['instruction']
-        tasks = [task_instr_json['task']]
-        while user_msg is not None:
-            backend.add_message(messages, {"role": "user", "content": user_msg})
-            llm_response = await backend.a_get_llm_message(messages, model=model, stream=False)
-            backend.add_message(messages, {"role": "assistant", "content": llm_response})
-            task_instr_json = test_case.generator(messages)
-            if task_instr_json is None: break
-            user_msg = task_instr_json['instruction']
-            tasks.append(task_instr_json['task'])
-        print(f'\tCompleted async consistency run {i+1}.')
-        # score the trajectory
-        score = test_case.scorer(messages, tasks=tasks)
-        # if [score.score] not in target:
-        #     print(f'Failed for model {model}: {score}\n{messages}')
-        return score
+        tasks.append(task_instr_json['task'])
 
-    agg_scores = run_score_test_case(test_case)
-    print(agg_scores)
-    # for model, scores in agg_scores.items():
-    #     assert scores in test_case.target, f'Failed for model {model}: {scores}'
+    # score the trajectory
+    score = scorer_add_gen(messages, tasks=tasks)
+    return score
 
+
+def test_add_gen_tasks():
+    
+    hyperparam_dict = {
+        'model': ['gpt-3.5-turbo', 'gpt-4'],
+        'back_and_forth': [3, 10],
+        'prompt_version': [0, 1]
+    }
+
+    scores_df = batch_eval(
+        test_function=run_score_test_case,
+        args=(None,),
+        hyperparam_dict=hyperparam_dict,
+        consistency=5
+    )
+    
+    scores_df['result'] = scores_df['score'].apply(mean_rouge_eval)
+    print(scores_df[['model','back_and_forth','prompt_version','score','result']])
+    
+    # save the scores to a file
+    scores_df.to_csv('add_gen_tasks_scores.csv')
 
 
 # guardrail = score(data) in target

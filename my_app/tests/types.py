@@ -17,27 +17,23 @@ class Dataset(object):
     def __iter__(self):
         for test_case in self.test_cases:
             yield test_case
-            
+
 class Score(object):
-    def __init__(self, score, scorer_args, scorer_kwargs):
+    def __init__(self, score, scorer_args=None, scorer_kwargs=None):
         self.score = score
         self.scorer_args = scorer_args
         self.scorer_kwargs = scorer_kwargs
-
-    def __float__(self):
-        return float(self.score)
-    
-    def __add__(self, other):
-        if isinstance(other, Score) or isinstance(other, (int, float)):
-            return float(self) + float(other)
-        return NotImplemented
-    
-    def __radd__(self, other):
-        return self.__add__(other)
-    
+        
+    # create function with returns class vars as a kv dict
+    def to_dict(self):
+        return {
+            'score': self.score,
+            'scorer_args': self.scorer_args,
+            'scorer_kwargs': self.scorer_kwargs
+        }
+        
     def __repr__(self):
         return f'{self.score}'
-    
 
 # this contains a list of scores
 class BatchScore(object):
@@ -68,9 +64,9 @@ class Evaluator(object):
     def _default_in_range(self, score):
         return score == self._pass_range
 
-    def __call__(self, scores, *args: Any, **kwds: Any) -> Any:
-        result =  self._in_range(self._pass_range, scores, *args, **kwds)
-        self._result = (scores, result)
+    def __call__(self, score, *args, **kwds):
+        result =  self._in_range(self._pass_range, score, *args, **kwds)
+        self._result = (score, result)
         return result
     
     def pickle(self):
