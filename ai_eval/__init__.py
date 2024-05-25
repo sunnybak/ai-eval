@@ -1,7 +1,9 @@
-from .datasets import *
-from .trajectory_generators import *
+from .evaluators.BaseEvaluator import BaseEvaluator as Evaluator
+from .scorers.score import scorer
+from .run_experiment import run_experiment
 
 __all__ = [
-    'datasets',
-    'trajectory_generators'
+    'Evaluator',
+    'scorer',
+    'run_experiment'
 ]

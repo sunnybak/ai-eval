@@ -1,8 +1,7 @@
 from my_app.src.soulchat import soulchat as backend
-from ai_eval.util import *
 
-from types import Evaluator
-import json
+from ai_eval.util import a_openai_call_msg
+from ai_eval import Evaluator, scorer, run_experiment
 
 evaluator = Evaluator(pass_range=True, in_range=lambda x: x >= 0.5)
 
@@ -52,8 +51,8 @@ async def run_app(_, model, back_and_forth=10):
 
 def test_dummy():
     
-    score_df = batch_eval(
-        test_function=run_app,
+    score_df = run_experiment(
+        app=run_app,
         args=(None,),
         hyperparam_dict={
             'model': ['gpt-3.5-turbo'],
@@ -61,7 +60,7 @@ def test_dummy():
         consistency=1
     )
     
-    # score_df['result'] = score_df['score'].apply(evaluator)
+    score_df['result'] = score_df['score'].apply(evaluator)
     # print(score_df[['duration']])
     # print(score_df[['scorer_args', 'scorer_kwargs']])
     # print(score_df[['model', 'score', 'result']])

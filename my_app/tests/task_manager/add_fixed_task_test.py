@@ -1,7 +1,6 @@
 import pytest
 from my_app import task_manager_backend as backend
-from types import Evaluator
-from ai_eval.util import batch_eval, scorer
+from ai_eval import Evaluator, scorer, run_experiment
 import numpy as np
 
 
@@ -105,10 +104,11 @@ class TestGroup:
 
     def test_add_fixed_tasks(self, test_case): 
 
-        scores_df = batch_eval(test_function=score_test_case, 
-                               args=(test_case,), 
-                               hyperparam_dict={'model': ['gpt-3.5-turbo', 'gpt-4']}, 
-                               consistency=2)
+        scores_df = run_experiment(
+            app=score_test_case, 
+            args=(test_case,), 
+            hyperparam_dict={'model': ['gpt-3.5-turbo', 'gpt-4']}, 
+            consistency=2)
 
         scores_df['result'] = scores_df['score'].apply(eval)
         

@@ -1,4 +1,4 @@
-from ai_eval.util import scorer
+from ai_eval import scorer
 from rouge_score import rouge_scorer
 
 def token_rouge(string_a, string_b):
@@ -21,21 +21,3 @@ def scorer_add_gen(messages, tasks=None) -> float:
         score = token_rouge(final_answer, '[] ' + task.lower())
         rouge_scores.append(score)
     return sum(rouge_scores)/len(rouge_scores)
-
-@scorer
-def scorer_human_or_ai(message, tasks=None):
-    import random
-    
-    # 20% of the times ask for human input
-    if random.random() < 0.2:
-        # ask for human input
-        # add it to queue
-        return 0
-    else:
-        # ask for AI input
-        
-        return 1
-
-# app
-# evals
-# tests

@@ -2,10 +2,7 @@ import streamlit as st
 from openai import OpenAI
 import random
 import time
-# from ai_eval import AIEval
-# from my_app.evals.scorers import *
 
-# ai = AIEval()
 
 client = OpenAI(api_key='sk-proj-Gxa6OeFmoePlz04nf33ST3BlbkFJ00amYaRJhwF7gE0pVLve')
 

@@ -1,7 +1,8 @@
 import pytest
-from ai_eval.util import openai_call, batch_eval
-from my_app.src.code_suggester import coder_backend as backend
+from ai_eval.util import openai_call
+from ai_eval import run_experiment
 
+from my_app.src.code_suggester import coder_backend as backend
 from my_app.evals.scorers.code_scorers import score_code_assistant
 from my_app.evals.evaluators.code_evals import code_eval
 
@@ -59,8 +60,8 @@ class TestGroup:
     
     def test_code_executes(self, seed_trajectory):
         
-        scores_df = batch_eval(
-                        test_function=score_test_case, 
+        scores_df = run_experiment(
+                        app=score_test_case, 
                         args=(seed_trajectory,), 
                         hyperparam_dict={
                             'model': ['gpt-3.5-turbo', 'gpt-4'],

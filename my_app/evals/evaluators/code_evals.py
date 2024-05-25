@@ -1,4 +1,4 @@
-from types import Evaluator
+from ai_eval import Evaluator
 import numpy as np
 
 code_eval = Evaluator(

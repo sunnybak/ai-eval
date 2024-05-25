@@ -1,7 +1,7 @@
-import pytest
-from ai_eval.util import async_score, openai_call
-from my_app.src.code_suggester import coder_backend as backend
+from ai_eval.util import openai_call
+from ai_eval import run_experiment
 
+from my_app.src.code_suggester import coder_backend as backend
 from my_app.evals.scorers.code_scorers import score_code_assistant
 from my_app.evals.evaluators.code_evals import code_eval
 
@@ -27,8 +27,8 @@ def code_prompt_ai_generator(messages):
         return task_instr
     return None
 
-@async_score(consistency=2)
-async def score_test_case(i, test_case, model) -> bool:
+
+async def score_test_case(_, model) -> bool:
 
     # initialize messages
     messages = backend.get_init_messages()
@@ -45,8 +45,6 @@ async def score_test_case(i, test_case, model) -> bool:
         llm_response = await backend.a_get_llm_message(messages, model, stream=False)
         backend.add_message(messages, {"role": "assistant", "content": llm_response})
 
-    print(f"\tCompleted async consistency rep {i+1}.")
-
     # score the trajectory
     score = score_code_assistant(messages)
     return score
@@ -56,13 +54,13 @@ class TestGroup:
 
     def test_code_executes(self):
 
-        batch_scores = score_test_case(None)
-        print("Batch scores:", batch_scores)
+        scores_df = run_experiment(
+            score_test_case,
+            (None,),
+            model='gpt-3.5-turbo',
+            consistency=3,
+        )
+        print("Batch scores:", scores_df)
 
-        # run eval
-        eval_result = code_eval(batch_scores["gpt-3.5-turbo"])
-        
-
-        print("Scores:", batch_scores["gpt-3.5-turbo"][0].scorer_args)
-        print("Result:", eval_result)
-        assert eval_result == True
+        scores_df['result'] = scores_df['score_0'].apply(code_eval)
+        print(scores_df[['model', 'score_0', 'result']])

@@ -1,4 +1,4 @@
-from ai_eval.util import scorer
+from ai_eval import scorer
 
 # score is 1 if code is executable and 0 otherwise
 # use python exec function

@@ -1,7 +1,8 @@
 from my_app.evals.evaluators.rouge_eval import mean_rouge_eval, comp_eval
 from my_app.evals.scorers.rouge_scorer import scorer_add_gen
 from my_app import task_manager_backend as backend
-from ai_eval.util import a_openai_call, batch_eval
+from ai_eval.util import a_openai_call
+from ai_eval import run_experiment
 import json
 
 
@@ -65,8 +66,8 @@ def test_add_gen_tasks():
         'prompt_version': [0, 1]
     }
 
-    scores_df = batch_eval(
-        test_function=run_app,
+    scores_df = run_experiment(
+        app=run_app,
         args=None,
         hyperparam_dict=hyperparam_dict,
         consistency=2
