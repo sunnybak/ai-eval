@@ -1,10 +1,5 @@
-import os
-import sys
-
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../..")))
-
 import pytest
-from my_app.tests.util import async_score, openai_call
+from ai_eval.util import async_score, openai_call
 from my_app.src.code_suggester import coder_backend as backend
 
 from my_app.evals.scorers.code_scorers import score_code_assistant

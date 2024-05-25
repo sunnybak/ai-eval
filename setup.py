@@ -9,6 +9,11 @@ from setuptools import setup, find_packages
 package_data = {'': ['*']}
 
 requires = [
+    'requests',
+    'pydantic',
+    'openai',
+    'numpy',
+    'pandas',
 ]
 
 
@@ -21,13 +26,12 @@ setup(
     author='HoneyHive',
     author_email="support@honeyhive.ai",
     scripts=[],
-    packages=find_packages(where='src', exclude=['tests*']),
-    package_dir={'': 'src'},
+    packages=find_packages(),
     package_data=package_data,
     include_package_data=True,
     install_requires=requires,
     license="Apache License 2.0",
-    python_requires=">= 3.7",
+    python_requires=">= 3.8",
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',

@@ -1,13 +1,7 @@
-import os
-import sys
-
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../..")))
-
-from typing import List, Dict
 import pytest
 from my_app import task_manager_backend as backend
-from my_app.tests.types import Dataset, Evaluator, Score
-from my_app.tests.util import batch_eval, scorer
+from types import Evaluator
+from ai_eval.util import batch_eval, scorer
 import numpy as np
 
 

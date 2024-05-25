@@ -5,3 +5,6 @@ __pycache__
 dump.rdb
 tmp/
 ai_eval.egg-info/
+venv/
+build/
+.pytest_cache/

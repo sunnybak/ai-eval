@@ -1,4 +1,4 @@
-from my_app.tests.types import Evaluator
+from types import Evaluator
 import numpy as np
 
 code_eval = Evaluator(
