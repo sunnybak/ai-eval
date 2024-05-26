@@ -21,14 +21,14 @@ class BaseEvaluator(object):
         else:
             self._in_range = BaseEvaluator.DEFAULT_IN_RANGE
     
-    # calling the evaluator runs the in_range function on the pass_range
+    # calling the evaluator runs the in_range function on pass_range
     def __call__(self, *in_range_args, **in_range_kwargs):
         return self._in_range(self._pass_range, *in_range_args, **in_range_kwargs)
     
     # run the eval over a custom range with the same in_range function
-    def in_custom_range(self, custom_range, *in_range_args, **in_range_kwargs):
-        assert custom_range is not None, 'custom_range must be provided'
-        return BaseEvaluator(custom_range, self._in_range, *in_range_args, **in_range_kwargs)
+    def with_custom_pass_range(self, custom_pass_range, *in_range_args, **in_range_kwargs):
+        assert custom_pass_range is not None, 'custom_pass_range must be provided'
+        return BaseEvaluator(custom_pass_range, self._in_range, *in_range_args, **in_range_kwargs)
 
     # run the eval over the same range with a custom in_range function
     def with_custom_in_range(self, custom_in_range, *in_range_args, **in_range_kwargs):

@@ -8,8 +8,6 @@ def is_valid_python_syntax(code):
         return False
 
 
-
-
 # Example usage
 code_snippet = '''
 def greet(name):

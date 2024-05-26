@@ -1,9 +1,18 @@
-tests folder has everything
-- [ ] detach the app from the sdk
 
-Sunny
-target > evaluators
-tests
+Scorers:
+- passing percentage
+
+Evaluators:
+- numerical range
+- string matching
+-
+
+[] env variables for openai keys
+[] rate limit calculation
+[] cost calculation
+
+
+
 
 0. CLI command
 1. Tests folder structure mapping

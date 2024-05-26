@@ -42,3 +42,11 @@ docs
 - [ ] examples, cookbooks, best practices, documentation
 - [ ] metrics and reports
 
+
+
+
+Tests: Alignment ! 😡
+
+App: Alignment ? 🧐
+
+Evals: Alignment = 😇
