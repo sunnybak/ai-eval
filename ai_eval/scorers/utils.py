@@ -36,6 +36,6 @@ def calculate_cost(provider, model, prompt_tokens, completion_tokens):
         raise ValueError(f"Model {model_id} not found in openrouter list")
 
     pricing = found_model['pricing']
-    cost = completion_tokens * pricing['completion'] + prompt_tokens * pricing['prompt']
+    cost = (completion_tokens * float(pricing['completion'])) + (prompt_tokens * float(pricing['prompt']))
     return cost
 
