@@ -1,1 +1,7 @@
 nlpaug
+sentence-transformers
+nltk
+python-Levenshtein
+spacy
+openai
+textstat
