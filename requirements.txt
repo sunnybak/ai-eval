@@ -1,1 +1,2 @@
 nlpaug
+sentence-transformers
