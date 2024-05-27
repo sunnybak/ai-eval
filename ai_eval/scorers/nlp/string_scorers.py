@@ -147,6 +147,15 @@ class StringScorer:
             entities = [(text, label) for text, label in entities if label in entity_types]
         return entities
 
+    def detect_pii(self):
+        """
+        Detect personally identifiable information (PII) in the text
+        :return: List of PII found in the text
+        """
+        entity_types = ["PERSON", "NORP", "FAC", "ORG", "GPE", "LOC"]
+        entities = self.entities(entity_types)
+        return entities
+
     def jaccard_similarity(self, expected, n=1):
         """
         Calculate the Jaccard similarity between the text and the expected string
