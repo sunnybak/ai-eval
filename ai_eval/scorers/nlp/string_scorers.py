@@ -216,7 +216,7 @@ if __name__ == "__main__":
     text = "The quick brown fox jumps over the lazy dog"
     expected = "A fast brown fox leaps over a sleepy dog"
     scorer = StringScorer(text)
-    embedding_score = scorer.embedding_similarity(expected, precision="binary")
+    embedding_score = scorer.embedding_similarity(expected) 
     print(f"Embedding Similarity Score: {embedding_score}")
 
     # Sentiment Analysis Example
