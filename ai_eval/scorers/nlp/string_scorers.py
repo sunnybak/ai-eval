@@ -1,16 +1,19 @@
-from nltk.util import ngrams
 import warnings
-from nltk.sentiment.vader import SentimentIntensityAnalyzer
 import Levenshtein
 from sentence_transformers import SentenceTransformer
 from sentence_transformers.util import cos_sim
 from transformers import pipeline
 import spacy
 import nltk
+from nltk.util import ngrams
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
 import textstat
 from langdetect import detect
 
-class StringScorer:
+from ai_eval.scorers.AbsBaseScorer import AbsBaseScorer
+from ai_eval.scorers.score import scorer
+
+class StringScorer(AbsBaseScorer):
     def __init__(
              self, 
              text, 
@@ -48,6 +51,7 @@ class StringScorer:
                 # throw an exception asking the user to run - python -m spacy download en_core_web_sm
                 raise Exception("spaCy model not found. Please run: python -m spacy download en_core_web_sm")
 
+    @scorer
     def language(self):
         """
         Detect the language of the text
@@ -56,6 +60,7 @@ class StringScorer:
         lang = detect(self.text)
         return lang
 
+    @scorer
     def readability(self, precision=0, lang="en") -> float:
         """
         Calculate the grade level of the text
@@ -80,6 +85,7 @@ class StringScorer:
         grade_level = round(grade_level, precision)
         return grade_level
 
+    @scorer
     def reading_time(self, wpm=200) -> float:
         """
         Calculate the reading time of the text
@@ -90,6 +96,7 @@ class StringScorer:
         reading_time = textstat.reading_time(self.text, ms_per_char=ms_per_char)
         return reading_time
 
+    @scorer
     def topics(self, topics=None, threshold=0.5):
         if topics is None:
             raise ValueError("Topics must be provided")
@@ -103,6 +110,7 @@ class StringScorer:
         result = list(result.keys())
         return result
 
+    @scorer
     def sentiment(self) -> float:
         """
         Calculate the sentiment score of the text using VADER
@@ -111,6 +119,7 @@ class StringScorer:
         score = self.sentiment_analyzer.polarity_scores(self.text)["compound"]
         return score
 
+    @scorer
     def entities(self, entity_types=None):
         """
         Extract entities from the text using spaCy
@@ -147,6 +156,7 @@ class StringScorer:
             entities = [(text, label) for text, label in entities if label in entity_types]
         return entities
 
+    @scorer
     def detect_pii(self):
         """
         Detect personally identifiable information (PII) in the text
@@ -156,6 +166,7 @@ class StringScorer:
         entities = self.entities(entity_types)
         return entities
 
+    @scorer
     def jaccard_similarity(self, expected, n=1):
         """
         Calculate the Jaccard similarity between the text and the expected string
@@ -170,6 +181,7 @@ class StringScorer:
         similarity = len(intersection) / len(union) if union else 0
         return similarity
 
+    @scorer
     def hamming_distance(self, expected):
         """
         Calculate the Hamming distance between the text and the expected string
@@ -181,6 +193,7 @@ class StringScorer:
         distance = sum(c1 != c2 for c1, c2 in zip(self.text, expected))
         return distance
 
+    @scorer
     def levenshtein_distance(self, expected):
         """
         Calculate the Levenshtein distance between the text and the expected string
@@ -190,6 +203,7 @@ class StringScorer:
         distance = Levenshtein.distance(self.text, expected)
         return distance
 
+    @scorer
     def embedding_similarity(self, expected) -> float:
         """
         Calculate the embedding similarity between the text and the expected string
