@@ -4,3 +4,4 @@ nltk
 python-Levenshtein
 spacy
 openai
+textstat
