@@ -8,6 +8,7 @@ from transformers import pipeline
 import spacy
 import nltk
 import textstat
+from langdetect import detect
 
 class StringScorer:
     def __init__(
@@ -46,6 +47,14 @@ class StringScorer:
             except OSError:
                 # throw an exception asking the user to run - python -m spacy download en_core_web_sm
                 raise Exception("spaCy model not found. Please run: python -m spacy download en_core_web_sm")
+
+    def language(self):
+        """
+        Detect the language of the text
+        :return: The language of the text
+        """
+        lang = detect(self.text)
+        return lang
 
     def readability(self, precision=0, lang="en") -> float:
         """
