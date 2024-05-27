@@ -1,7 +1,7 @@
 from typing import Any, Callable
-from ai_eval.evaluators.BaseEvaluator import BaseEvaluator
+from ai_eval.targets.BaseTarget import BaseTarget
 
-class SetEvaluator(BaseEvaluator):
+class ContainsTarget(BaseTarget):
     '''Evaluator for checking if an item is inside a set of passing items'''
     
     @staticmethod
@@ -11,4 +11,4 @@ class SetEvaluator(BaseEvaluator):
         return x in pass_range        
     
     def __init__(self, pass_range):
-        super().__init__(pass_range, in_range = SetEvaluator.contains)
+        super().__init__(pass_range, in_range = ContainsTarget.contains)

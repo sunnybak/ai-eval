@@ -1,6 +1,6 @@
 from ai_eval.chat.chat_backend import ChatBackend
 from ai_eval.util import a_openai_call_msg
-from ai_eval import Evaluator, scorer, run_experiment
+from ai_eval import Target, scorer, run_experiment
 
 
 async def generator_add_gen(messages, back_and_forth=10):
@@ -45,6 +45,9 @@ async def run_app(_, model, back_and_forth=10):
     return []
 
 def test_dummy():
+    
+    # simulate multi-turn chat
+    # simulate agents
     
     score_df = run_experiment(
         app=run_app,

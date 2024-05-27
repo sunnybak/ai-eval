@@ -1,7 +1,7 @@
 from typing import Any, Union, List, Tuple
-from ai_eval.evaluators.BaseEvaluator import BaseEvaluator
+from ai_eval.targets.BaseTarget import BaseTarget
 
-class NumericRangeEvaluator(BaseEvaluator):
+class NumericRangeTarget(BaseTarget):
     '''Evaluator for checking if a numeric value is within a passing range'''
 
     @staticmethod
@@ -83,10 +83,10 @@ class NumericRangeEvaluator(BaseEvaluator):
         
         in_interval = None
         if type(pass_range) == str:
-            in_interval = NumericRangeEvaluator.in_str_interval
+            in_interval = NumericRangeTarget.in_str_interval
         elif type(pass_range) == list or type(pass_range) == tuple:
-            in_interval = NumericRangeEvaluator.in_num_interval
+            in_interval = NumericRangeTarget.in_num_interval
         elif type(pass_range) in [int, float]:
-            in_interval = NumericRangeEvaluator.is_equal
+            in_interval = NumericRangeTarget.is_equal
             
         super().__init__(pass_range, in_range=in_interval)

@@ -1,6 +1,6 @@
 import pytest
 from my_app import task_manager_backend as backend
-from ai_eval import Evaluator, scorer, run_experiment
+from ai_eval import Target, scorer, run_experiment
 import numpy as np
 
 

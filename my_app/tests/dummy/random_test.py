@@ -1,5 +1,5 @@
-from ai_eval import Evaluator, scorer, run_experiment
-from ai_eval.evaluators import NumericRangeEvaluator
+from ai_eval import Evaluator, Target, scorer, run_experiment
+from ai_eval.targets import NumericRangeTarget
 import numpy as np
 import random
 import asyncio
@@ -44,18 +44,26 @@ def test_dummy():
         all_result_1 = np.all(scores['result_1'])
         return all_result_0 or all_result_1, all_result_0 and all_result_1
 
-
     
-    rng_eval = NumericRangeEvaluator(pass_range='[0.5,)')
+    rng_eval = NumericRangeTarget(pass_range='[0.5,)')
     scores_df['result_rng'] = scores_df['score_1'].apply(rng_eval)
 
-    comp_eval = Evaluator(in_range=comp)
-    gen_eval = Evaluator(pass_range=(0.5,1),
+    comp_target = Target(in_range=comp)
+    gen_target = Target(pass_range=(0.5, 1, 'abc', []),
                         in_range=lambda range, scores: range[0] < np.mean(scores) <= range[1]
                         )
-    scores_df['result_0'] = scores_df['score_0'].apply(gen_eval.with_custom_in_range(lambda _,score: score == 1))
-    scores_df['result_1'] = scores_df['score_1'].apply(gen_eval)
+    
+    gen_eval = Evaluator(target=gen_target, scorer=scorer_1)
+    comp_eval = Evaluator(target=comp_target)
+    
+    scores_df['result_0'] = scores_df['score_1'].apply(gen_eval)
+    
+    print(0.5 in gen_eval)
+    scores_df['result_0'] = scores_df['score_0'].apply(gen_target.with_custom_in_range(lambda _,score: score == 1))
+    scores_df['result_1'] = scores_df['score_1'].apply(gen_target)
     scores_df['result_comp'] = scores_df[['result_0', 'result_1']].apply(comp_eval, axis=1)
+    
+    scores_df['result_0'] = scores_df['score_0'].apply(gen_target)
     
     print('Results:\n',scores_df[['result_0', 'result_1','result_rng','result_comp']])
     
@@ -63,3 +71,36 @@ def test_dummy():
     # print cols
     print(scores_df.columns)
     print(scores_df.shape)
+
+    
+    # scores_df['score'] = scores_df['data'].apply(score)
+    # scores_df['result'] = scores_df['score'].apply(eval)
+    
+    # eval as a service
+    # evalClient
+    
+    # RPC
+    
+    # class EvalPipeline:
+    #     def __init__(self, scorer, evaluator):
+    #         self.evaluators = evaluators
+        
+    #     def __call__(self, data):
+    #         return self.eval(self.score(data))
+    
+    # Evaluator = Scorer + Target(target, in_range)?
+    
+    
+    # Score the safety of this prompt / 10  
+
+    # Is this prompt safe to execute?
+
+    # test ! = guardrail ? = evaluation =
+    
+    # df = pd.DataFrame()
+    # df['guardrail'] = df['data'].apply(score).apply(eval)
+    
+    # guardrails
+    # label-free
+    # with-label
+    

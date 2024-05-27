@@ -1,7 +1,7 @@
 from my_app.src.soulchat import soulchat as backend
 
 from ai_eval.util import a_openai_call_msg
-from ai_eval import Evaluator, scorer, run_experiment
+from ai_eval import Target, scorer, run_experiment
 
 evaluator = Evaluator(pass_range=True, in_range=lambda x: x >= 0.5)
 

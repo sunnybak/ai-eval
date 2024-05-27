@@ -1,11 +1,13 @@
-from ai_eval.evaluators.BaseEvaluator import BaseEvaluator
+from ai_eval.targets.BaseTarget import BaseTarget
 
-class StringEvaluator(BaseEvaluator):
+class StringTarget(BaseTarget):
     
     def exact_str_match(self, pass_range, score):
         return pass_range == score
     
     # hamming distance
+    
+    # regex
     
     # levenshtein distance
     

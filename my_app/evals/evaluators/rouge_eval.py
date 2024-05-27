@@ -1,4 +1,4 @@
-from ai_eval import Evaluator
+from ai_eval import Target
 import numpy as np
 
 # eval = 0.7 <= avg(rouge) < 1.0
