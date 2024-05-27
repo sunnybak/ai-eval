@@ -62,17 +62,3 @@ class ChatScorer(AbsBaseScorer):
         if self.messages[-1]['role'] == ChatRoles.user:
             return ChatRoles.assistant
         return ChatRoles.user
-
-
-if __name__ == '__main__':
-
-    messages = [
-        { 'role': 'user', 'content': 'What is artificial intelligence?' },
-        { 'role': 'assistant', 'content': 'Artificial intelligence is the simulation of human intelligence processes by machines, especially computer systems.' },
-    ]
-    
-    chat_scorer = ChatScorer(messages)
-    
-    print(chat_scorer.total_chat_length())
-    print(chat_scorer.chat_role_counts())
-    print(chat_scorer.chat_role_tokens())

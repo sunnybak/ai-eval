@@ -4,9 +4,12 @@ from ai_eval.scorers.score import Score
 
 class BaseEvaluator(object):
     
+    DEFAULT_TARGET = BaseTarget()
+    DEFAULT_SCORER = lambda x: x
+    
     def __init__(self, target: BaseTarget, scorer: Callable = None):
-        self.target = target
-        self.scorer = scorer or (lambda x: x)
+        self.target = target or BaseEvaluator.DEFAULT_TARGET
+        self.scorer = scorer or BaseEvaluator.DEFAULT_SCORER
         
         self._scores: List[Score] = [] # cache of the scores for the target
         self._results: List[bool] = [] # cache of the results for the target
