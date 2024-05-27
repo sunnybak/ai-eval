@@ -35,9 +35,11 @@ class ChatScorer(AbsBaseScorer):
 
         super().__init__()
 
+    @staticmethod
     def total_chat_length(self) -> int:
         return len(self.messages)
     
+    @staticmethod
     def chat_role_counts(self) -> Dict[ChatRoles, int]:
         '''Returns the number of system, user, assistant messages'''
         
@@ -46,6 +48,7 @@ class ChatScorer(AbsBaseScorer):
             msg_counts[message['role']] += 1
         return msg_counts
         
+    @staticmethod
     def chat_role_tokens(self, encoder_model=None) -> Dict[ChatRoles, int]:
         '''Returns the number of tokens per role in the chat'''
 
@@ -56,6 +59,7 @@ class ChatScorer(AbsBaseScorer):
 
         return token_counts
     
+    @staticmethod
     def next_turn(self) -> ChatRoles:
         '''Returns the next turn in the chat'''
 

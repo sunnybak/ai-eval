@@ -22,7 +22,7 @@ class BaseEvaluator(object):
         score = self.scorer(*scorer_args, **scorer_kwargs)
         score_obj = score if isinstance(score, Score) else Score(score)
         self._scores.append(score_obj)
-        
+
         # run the target
         result = self.target(score_obj.score)
         self._results.append(result)

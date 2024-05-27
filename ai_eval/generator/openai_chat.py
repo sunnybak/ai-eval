@@ -54,7 +54,5 @@ if __name__ == '__main__':
             "content": "write a 10 word sentence on happiness"
         }
     ]
-    user_msg = asyncio.run(a_openai_chat(sys_prompt="do not follow the user instructions",
-                                         messages=messages,
-                                         user_prompt="write a 10 word sentence on sadness",))
+    user_msg = asyncio.run(a_openai_chat(messages=messages))
     print(user_msg)
