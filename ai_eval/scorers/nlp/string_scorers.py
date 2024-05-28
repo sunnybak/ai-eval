@@ -103,6 +103,8 @@ class StringScorer(AbsBaseScorer):
         self._load_classification_model()
         if self.classification_model is None:
             raise Exception("Model not found")
+        # threshold needs to be adjusted based on the number of topics
+        threshold = threshold / len(topics)
         result = self.classification_model(self.text, topics)
         result = {topic: score for topic, score in zip(result["labels"], result["scores"])}
         result = {topic: score for topic, score in result.items() if score > threshold}
@@ -221,65 +223,10 @@ class StringScorer(AbsBaseScorer):
 
 # Example usage
 if __name__ == "__main__":
-    # Initialize the text for the scorer
-    text = "The quick brown fox jumps over the lazy dog"
-    scorer = StringScorer(text)
-
-    # Jaccard Similarity Example
-    expected = "A fast brown fox leaps over a sleepy dog"
-    jaccard_score = scorer.jaccard_similarity(expected, n=2)
-    print(f"Jaccard Similarity Score: {jaccard_score}")
-
-    # Hamming Distance Example
-    text = "karolin"
-    expected = "kathrin"
-    scorer = StringScorer(text)
-    hamming_score = scorer.hamming_distance(expected)
-    print(f"Hamming Distance Score: {hamming_score}")
-
-    # Levenshtein Distance Example
-    text = "kitten"
-    expected = "sitting"
-    scorer = StringScorer(text)
-    levenshtein_score = scorer.levenshtein_distance(expected)
-    print(f"Levenshtein Distance Score: {levenshtein_score}")
-
-    # Embedding Similarity Example
-    text = "The quick brown fox jumps over the lazy dog"
-    expected = "A fast brown fox leaps over a sleepy dog"
-    scorer = StringScorer(text)
-    embedding_score = scorer.embedding_similarity(expected) 
-    print(f"Embedding Similarity Score: {embedding_score}")
-
-    # Sentiment Analysis Example
-    text = "The movie was fantastic! I really enjoyed it."
-    scorer = StringScorer(text)
-    sentiment_scores = scorer.sentiment()
-    print(f"Sentiment Scores: {sentiment_scores}")
-
     # Entity Extraction Example
-    text = "Barack Obama was born in Hawaii."
+    text = "Water is kinda wet. That's how it goes!"
     scorer = StringScorer(text)
-    entities = scorer.entities()
-    print(f"Entities: {entities}")
-
-    # Readability Example
-    text = "The quick brown fox jumps over the lazy dog"
-    scorer = StringScorer(text)
-    grade_level = scorer.readability()
-    print(f"Grade Level: {grade_level}")
-
-    # Reading Time Example
-    text = "The quick brown fox jumps over the lazy dog"
-    scorer = StringScorer(text)
-    reading_time = scorer.reading_time()
-    print(f"Reading Time: {reading_time}")
-
-    # Topics Example
-    text = "The quick brown fox jumps over the lazy dog"
-    topics = ["animals", "nature"]
-    scorer = StringScorer(text)
-    topic_scores = scorer.topics(topics)
-    print(f"Topic Scores: {topic_scores}")
+    readabilty = scorer.readability(precision=2)
+    print(f"Readability: {readabilty}")
 
 __all__ = ["StringScorer"]
