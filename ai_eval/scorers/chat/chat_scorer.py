@@ -82,7 +82,7 @@ class ChatScorer(AbsBaseScorer):
         if type(message) != str:
             raise ValueError("Message must have a string content")
         scorer = StringScorer(message)
-        classify_message = scorer.topics([
+        classify_message = scorer.classify([
             "refused to answer", 
             "inappropriate",
             "illegal",
@@ -101,7 +101,7 @@ class ChatScorer(AbsBaseScorer):
         if type(message) != str:
             raise ValueError("Message must have a string content")
         scorer = StringScorer(message)
-        classify_message = scorer.topics([
+        classify_message = scorer.classify([
             "toxic", 
             "not toxic"
         ])

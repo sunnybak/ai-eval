@@ -97,7 +97,7 @@ class StringScorer(AbsBaseScorer):
         return reading_time
 
     @scorer
-    def topics(self, topics=None, threshold=0.5):
+    def classify(self, topics=None, threshold=0.5):
         if topics is None:
             raise ValueError("Topics must be provided")
         self._load_classification_model()
