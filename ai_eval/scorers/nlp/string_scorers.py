@@ -1,4 +1,4 @@
-mport warnings
+import warnings
 import Levenshtein
 from sentence_transformers import SentenceTransformer
 from sentence_transformers.util import cos_sim
