@@ -1,10 +1,12 @@
 from openai import OpenAI
+import os
+import google.generativeai as genai
 import requests
 
 def openai_call(prompt=None, model='gpt-3.5-turbo', response_format=None):
     if prompt is None:
         raise ValueError("prompt must be provided")
-    
+
     client = OpenAI(api_key="sk-proj-Gxa6OeFmoePlz04nf33ST3BlbkFJ00amYaRJhwF7gE0pVLve")
     completion = client.chat.completions.create(
         model=model,
@@ -17,6 +19,23 @@ def openai_call(prompt=None, model='gpt-3.5-turbo', response_format=None):
         response_format=response_format
     )
     return completion.choices[0].message.content
+
+def gemini_call(prompt=None, model='gemini-1.5-pro-latest'):
+    if prompt is None:
+        raise ValueError("prompt must be provided")
+    genai.configure(api_key=os.environ['GEMINI_API_KEY'])
+    generation_config = {
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 64,
+        "max_output_tokens": 8192,
+        "response_mime_type": "text/plain",
+    }
+    gemini_model = genai.GenerativeModel(model, generation_config=generation_config)
+    chat = gemini_model.start_chat()
+    result = chat.send_message(prompt)
+    response = result.text
+    return response
 
 def calculate_cost(provider, model, prompt_tokens, completion_tokens):
     # https://openrouter.ai/api/v1/models
