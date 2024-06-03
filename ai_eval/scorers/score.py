@@ -14,20 +14,17 @@ class Score(object):
 
 # scorer decorator to wrap an app scorer inside a Score object
 def scorer(score_func):
-    def wrapper(*args, **kwargs):
+    def wrapper(*scorer_args, **scorer_kwargs):
         # Check if the score function is async
         if asyncio.iscoroutinefunction(score_func):
-            # If it's async, return a promise of a Score object
+            # If score_func is async, return a Future Score object
             async def async_wrapper():
-                score = await score_func(*args, **kwargs)
-                # print("score: ", score)
-                # print("args: ", args)
-                # print("kwargs: ", kwargs)
-                return Score(score, args, kwargs)
+                score = await score_func(*scorer_args, **scorer_kwargs)
+                return Score(score, scorer_args, scorer_kwargs)
             return async_wrapper()
         else:
-            # If it's sync, return a Score object directly
-            score = score_func(*args, **kwargs)
-            return Score(score, args, kwargs)
+            # If score_func is sync, return a Score object
+            score = score_func(*scorer_args, **scorer_kwargs)
+            return Score(score, scorer_args, scorer_kwargs)
     return wrapper
 

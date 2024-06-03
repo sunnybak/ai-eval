@@ -31,7 +31,7 @@ class ChatScorer(AbsBaseScorer):
         self.messages = messages
         
         # token scorer
-        self._token_scorer = None
+        self._token_scorer = TokenScorer()
 
         super().__init__()
 
@@ -58,6 +58,21 @@ class ChatScorer(AbsBaseScorer):
             token_counts[message['role']] += self._token_scorer.token_count(message['content'])
 
         return token_counts
+    
+    def chat_total_tokens(self, encoder_model=None) -> Dict[ChatRoles, int]:
+        '''Returns the number of tokens per role in the chat'''
+
+        self._token_scorer = self._token_scorer or TokenScorer(encoder_model)
+        token_counts = {'input': 0, 'output': 0}
+        running = 0
+        for message in self.messages:
+            new_input = self._token_scorer.token_count(message['content'])
+            if message['role'] == 'user' or message['role'] == 'system':
+                token_counts['input'] += new_input + running
+            elif message['role'] == 'assistant':
+                token_counts['output'] += new_input
+            running += new_input
+        return token_counts    
     
     @staticmethod
     def next_turn(self) -> ChatRoles:

@@ -41,6 +41,21 @@ def openai_chat(messages=None, model='gpt-3.5-turbo'):
     return completion.choices[0].message.content
 
 
+def groq_chat(messages=None, model='gpt-3.5-turbo'):
+    from groq import Groq
+    
+    client = Groq(
+        # This is the default and can be omitted
+        api_key='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',
+    )
+
+    response = client.chat.completions.create(
+        messages=messages,
+        model="llama3-8b-8192",
+    )
+    
+    return response.choices[0].message.content
+
 if __name__ == '__main__':
     
     # run the generator

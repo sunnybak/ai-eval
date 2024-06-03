@@ -96,6 +96,7 @@ class StringScorer:
         self._load_classification_model()
         if self.classification_model is None:
             raise Exception("Model not found")
+        threshold = 1/len(topics)
         result = self.classification_model(self.text, topics)
         result = {topic: score for topic, score in zip(result["labels"], result["scores"])}
         result = {topic: score for topic, score in result.items() if score > threshold}

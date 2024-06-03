@@ -16,6 +16,15 @@ def scorer_2(x):
     return x + 0.5
 
 
+def app(func, *args, **kwargs):
+    async def wrapper():
+        # func(*args, **kwargs)
+        # print the args
+        print(args)
+    return wrapper
+
+# app(args, kwargs) -> [Score]
+# app(args, kwargs)
 async def run_app(_, model, len):
     res = generator()
     await asyncio.sleep(random.random())
@@ -29,7 +38,7 @@ def test_dummy():
         app=run_app,
         args=(None,),
         hyperparam_dict={
-            'model': ['gpt-3.5-turbo', 'gpt-4o', 'gpt-4o-turbo'],
+            'model': ['gpt-3.5-turbo'],
             'len': [3, 10],
         },
         consistency=4
@@ -72,6 +81,7 @@ def test_dummy():
     print(scores_df.columns)
     print(scores_df.shape)
 
+test_dummy()
     
     # scores_df['score'] = scores_df['data'].apply(score)
     # scores_df['result'] = scores_df['score'].apply(eval)
