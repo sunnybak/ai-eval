@@ -1,6 +1,6 @@
-<mxfile host="Electron" modified="2024-06-03T18:51:54.339Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.4.8 Chrome/124.0.6367.207 Electron/30.0.6 Safari/537.36" etag="5hifSoUZ4WvQfVucSiOh" version="24.4.8" type="device" pages="5">
+<mxfile host="Electron" modified="2024-06-04T00:53:48.987Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.4.8 Chrome/124.0.6367.207 Electron/30.0.6 Safari/537.36" etag="lRJtinKtdLBROH0MStgH" version="24.4.8" type="device" pages="5">
   <diagram name="Console" id="W2Z_r3ayVCPQX60ZS_IH">
-    <mxGraphModel dx="1042" dy="623" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1097" dy="623" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -88,7 +88,7 @@
         <mxCell id="LPKBP7n1JtOBHqyB0SJU-4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="sDT3G1I23atxg_FQpE4q-9" target="vni6KgP2bA-Ig4XpPl13-1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="sDT3G1I23atxg_FQpE4q-9" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;When is the AI Console in state &quot;Aligned&quot;?&lt;/font&gt;&lt;div&gt;&lt;font size=&quot;3&quot; style=&quot;&quot;&gt;Stop when the (cost, time, interestingness) &amp;gt; e&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font size=&quot;3&quot; style=&quot;&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+        <mxCell id="sDT3G1I23atxg_FQpE4q-9" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;When is the AI Console in state &quot;Aligned&quot;?&lt;/font&gt;&lt;div&gt;&lt;font size=&quot;3&quot; style=&quot;&quot;&gt;Stop when the (cost, time, sensitivity) &amp;gt; e&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font size=&quot;3&quot; style=&quot;&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
           <mxGeometry x="405" y="60" width="360" height="70" as="geometry" />
         </mxCell>
         <mxCell id="sDT3G1I23atxg_FQpE4q-13" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.star" vertex="1" parent="1">
@@ -120,6 +120,9 @@
         </mxCell>
         <mxCell id="AML--Ix5VLZLg2wgclFE-1" value="&lt;font style=&quot;font-size: 24px;&quot;&gt;Evals&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="895" y="390" width="200" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="Ud7Nt8AE_5RIbJTpkvNi-1" value="evals/scorers values =&amp;gt; attention&lt;div&gt;high attention = stop sensitivity is low = stop less frequently&lt;/div&gt;&lt;div&gt;low attention = stop sensitivity is high = stop more frequently&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="775" y="60" width="340" height="60" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
