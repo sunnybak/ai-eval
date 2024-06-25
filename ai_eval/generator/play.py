@@ -1,8 +1,8 @@
 from typing import Callable
-from ai_eval.evaluators import BaseEvaluator
+from ai_eval.evaluators.BaseEvaluator import BaseEvaluator
 from groq import AsyncGroq
 from ai_eval.generator.chat_gen import run
-from ai_eval.targets import ContainsTarget
+from ai_eval.targets.ContainsTarget import ContainsTarget
 import json
 
 client = AsyncGroq(api_key="")
