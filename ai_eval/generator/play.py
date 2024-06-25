@@ -5,7 +5,7 @@ from ai_eval.generator.chat_gen import run
 from ai_eval.targets import ContainsTarget
 import json
 
-client = AsyncGroq(api_key="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")
+client = AsyncGroq(api_key="")
 async def a_topic_scorer(topic, messages):
     response = await client.chat.completions.create(
         messages=messages + [
@@ -19,7 +19,6 @@ async def a_topic_scorer(topic, messages):
     return int(json.loads(response.choices[0].message.content)['score'])
 
 class TopicScoreEvaluator(BaseEvaluator):
-
     def __init__(self, topic):
         super().__init__(ContainsTarget([1,5]), a_topic_scorer, topic=topic)
         
