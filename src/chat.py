@@ -4,18 +4,6 @@ from ai_eval.evals import MaxCostEval, MaxTokenEval, MaxTokensEval, ToneEval, Em
 
 
 
-messages = ai.save(messages)
-
-
-
-
-
-
-
-
-
-
-
 # AI Settings of the app
 app = ChatAppSettings(
     app_prompt = 'Help the user with their medical condition', 

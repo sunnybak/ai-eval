@@ -14,6 +14,7 @@ from groq import AsyncGroq
 from ai_eval.scorers.chat.chat_scorer import ChatScorer
 from openai import AsyncOpenAI
 import json
+
 client = AsyncGroq(
     api_key='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',
 )
@@ -52,7 +53,7 @@ async def simulate_chat(app_prompt: str,
                         user_prompt: str = None, 
                         stop_word: str = 'END',
                         max_tokens: int = 10000,
-                        max_messages: int = 5,
+                        max_messages: int = 4,
                         max_cost: float = 1, # $
                         max_time: float = 10, # in seconds
                         ) -> Chat:
@@ -192,7 +193,7 @@ def run(chatbot=None, evaluator=None, user=None, repeat=5):
 
 # chatbot = "help the user generate a observability software PRD based off of an idea"
 # synth_user = "you are a student"
-# format_eval = 'pdf'
+# # format_eval = 'pdf'
 # run(chatbot)
 
 

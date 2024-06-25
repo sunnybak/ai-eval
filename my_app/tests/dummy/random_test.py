@@ -36,10 +36,13 @@ def test_dummy():
     
     scores_df = run_experiment(
         app=run_app,
-        args=(None,),
+        args=('arg1', 'arg2'),
         hyperparam_dict={
-            'model': ['gpt-3.5-turbo'],
-            'len': [3, 10],
+            'model': ['gpt-3.5-turbo', 'gpt-4'],
+            'prompt_1_version': [0, 1, 2],
+            'prompt_2_version': [0, 1],
+            'chunk_size': [100, 200],
+            'ocr_api_key': ['aws-textract', 'llama-index-pdf-parser'],
         },
         consistency=4
     )

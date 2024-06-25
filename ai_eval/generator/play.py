@@ -31,7 +31,4 @@ app = 'be a good legal assistant'
 topic_eval = TopicScoreEvaluator('tax credits')
 user = 'small business owner looking for tax advice'
 
-run(app, topic_eval, user)
-
-
-
+run(chatbot=app, evaluator=topic_eval, user=user)
