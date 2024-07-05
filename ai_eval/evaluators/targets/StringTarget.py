@@ -1,4 +1,4 @@
-from ai_eval.targets.BaseTarget import BaseTarget
+from ai_eval.evaluators.targets.BaseTarget import BaseTarget
 
 class StringTarget(BaseTarget):
     

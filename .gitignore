@@ -8,3 +8,4 @@ ai_eval.egg-info/
 venv/
 build/
 .pytest_cache/
+*.drawio

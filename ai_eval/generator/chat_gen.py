@@ -11,7 +11,7 @@
 from pydantic import BaseModel
 import asyncio
 from groq import AsyncGroq
-from ai_eval.scorers.chat.chat_scorer import ChatScorer
+from ai_eval.evaluators.scorers.chat.chat_scorer import ChatScorer
 from openai import AsyncOpenAI
 import json
 
@@ -25,8 +25,6 @@ oai_client = AsyncOpenAI(
 
 class Chat(BaseModel):
     messages: list[dict[str, str]]
-    
-    # implement messages validator
     
 class bcolors:
     HEADER = '\033[95m'
@@ -63,7 +61,7 @@ async def simulate_chat(app_prompt: str,
     
     if user_prompt is None:
         response = await oai_client.chat.completions.create(
-            messages=[{'role': 'user', 'content': "Your task is to create an LLM prompt for a synthetic user who will use an LLM App to test it out.The user will provide the app's objective below.Based on this, think step by step about the profile, needs, and background of the user.Then, generate an LLM system prompt for a synthetic user to use the App to test it out. Start the GENERATED_USER_PROMPT like - You are an intelligent, calm, direct human. Your task is to use an LLM App for the following objective: " + app_prompt + "Also make sure the synthetic user to keep messages short and conversational.Here is the objective of the App:  Respond with a json object that has the following format: {'role': 'user', 'content': GENERATED_USER_PROMPT}"}],
+            messages=[{'role': 'user', 'content': "Your task is to create an LLM prompt for a synthetic user who will use an LLM App to test it out. The user will provide the app's objective below. Based on this, think step by step about the profile, needs, and background of the user. Then, generate an LLM system prompt for a synthetic user to use the App to test it out. Start the GENERATED_USER_PROMPT like - You are an intelligent, calm, direct human. Your task is to use an LLM App for the following objective: " + app_prompt + "Also make sure the synthetic user to keep messages short and conversational. Here is the objective of the App:  Respond with a json object that has the following format: {'role': 'user', 'content': GENERATED_USER_PROMPT}"}],
             model="gpt-4o",
             response_format={ 'type': "json_object" },
         )
@@ -114,10 +112,7 @@ async def simulate_chat(app_prompt: str,
         else:
             messages_user.append({"role": 'user', "content": new_message})
             messages_app.append({"role": 'assistant', "content": new_message})
-            
-        # print the new message
-        # print_chat([{'role': 'user' if turn_user else 'assistant', 'content': new_message}])
-        
+
         if stop_word in new_message:
             break
         
@@ -142,22 +137,16 @@ async def simulate_chat(app_prompt: str,
         score = await evaluator(messages)
         print('Evaluation Score:', score)
         
-        return (score, messages)
+        return (score, messages_app)
 
-def run(chatbot=None, evaluator=None, user=None, repeat=5):
-    # simulate_chat(
-    #     app_prompt=chatbot,
-    #     evaluator=evaluator,
-    #     user_prompt=user
-    # )
-    # create 5 async tasks for this user
-    
+def run(chatbot=None, evaluator=None, user=None, repeat=3):
     async def run_gather():
         tasks = [asyncio.create_task(simulate_chat(app_prompt=chatbot, evaluator=evaluator, user_prompt=user)) for _ in range(repeat)]
         return await asyncio.gather(*tasks)
     results = asyncio.run(run_gather())
+
     # print the chat of the results that had the highest score
-    print('Scores: ', [r[0] for r in results])
+    print('\n\nScores: ', [r[0] for r in results])
     
     # get the messages of the most interesting chat
     idx = None
@@ -197,3 +186,6 @@ def run(chatbot=None, evaluator=None, user=None, repeat=5):
 # run(chatbot)
 
 
+# error codes for severity (tier based)
+
+# use report schema to allow users to specify collection of runs and relevant metrics and part of the pipeline. This will be a subset of the sim_config schema.
