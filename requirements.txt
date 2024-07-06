@@ -6,3 +6,4 @@ spacy
 openai
 textstat
 langdetect
+litellm

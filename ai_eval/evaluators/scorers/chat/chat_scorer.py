@@ -1,6 +1,6 @@
-from ai_eval.scorers import AbsBaseScorer
-from ai_eval.scorers.nlp.token_scores import TokenScorer
-from ai_eval.scorers.chat.chat_types import ChatRoles, ChatKeys
+from ai_eval.evaluators.scorers import AbsBaseScorer
+from ai_eval.evaluators.scorers.nlp.token_scores import TokenScorer
+from ai_eval.evaluators.scorers.chat.chat_types import ChatRoles, ChatKeys
 from typing import Dict
 
 

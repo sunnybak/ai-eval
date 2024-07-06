@@ -2,7 +2,7 @@ import asyncio
 import itertools
 import pandas as pd
 from typing import List, Dict, Tuple
-from ai_eval.scorers.score import Score
+from ai_eval.evaluators.scorers.score import Score
 import time
 
 def run_experiment(app, 

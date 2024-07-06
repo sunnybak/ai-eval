@@ -1,5 +1,5 @@
-from ai_eval.scorers.AbsBaseScorer import AbsBaseScorer
-from ai_eval.scorers.score import scorer
+from ai_eval.evaluators.scorers.AbsBaseScorer import AbsBaseScorer
+from ai_eval.evaluators.scorers.score import scorer
 from llama_index.core.evaluation import (
     FaithfulnessEvaluator,
     RelevancyEvaluator

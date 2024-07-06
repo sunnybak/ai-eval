@@ -1,5 +1,5 @@
 from typing import Any, Union, List, Tuple
-from ai_eval.targets.BaseTarget import BaseTarget
+from ai_eval.evaluators.targets.BaseTarget import BaseTarget
 
 class NumericRangeTarget(BaseTarget):
     '''Evaluator for checking if a numeric value is within a passing range'''

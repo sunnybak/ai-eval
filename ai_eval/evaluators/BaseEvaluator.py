@@ -1,6 +1,6 @@
-from ai_eval.targets.BaseTarget import BaseTarget
+from ai_eval.evaluators.targets.BaseTarget import BaseTarget
 from typing import Any, Callable, List
-from ai_eval.scorers.score import Score
+from ai_eval.evaluators.scorers.score import Score
 
 class BaseEvaluator(object):
     

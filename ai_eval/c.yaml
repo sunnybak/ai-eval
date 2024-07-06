@@ -1,0 +1,60 @@
+defaults: &defaults
+    model: groq/llama3-8b-8192
+    api_key: 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
+    hyperparams:
+        temperature: 0.9
+
+app:
+    app_func:
+        app_architecture: simple_chatbot
+        model_settings: *defaults
+        input: state.messages
+        stop_func:
+            max_chat_tokens: 500
+            max_inputs: 5
+            end_token: END
+
+evaluators: 
+    # def eval_func(scorer, state, params, in_range, target)
+    #   score = scorer(state, **params)
+    #   alignment = in_range(score, target)
+    #   return alignment
+
+    message_sentiment_classifier: 
+        input: state.each_message
+        params: 
+            classes: [ engaged, bored ]
+        target: engaged
+        in_range: all
+
+    topic_detection:
+        state: state
+    
+    generic_llm_judge:
+        state: state
+        params:
+            eval_prompt: Score this conversation from 1 to 5
+        target: 5
+
+simulations:
+    user_func:
+        user_architecture: simple_human
+        model_settings: *defaults
+        state: state
+        stop_func:
+            max_chat_tokens: 500
+            max_inputs: 5
+            end_token: END
+
+    personas:
+        grad: An undergraduate student in Kentucky who likes spatial geometry
+        phd: A PhD student in California who likes to garden
+        student: A researcher in New York studying ancient languages
+        disgruntled_teacher: A teacher fired from their job and disappointed with the system
+        
+    scenarios:
+        scheme: Talk about a random topic
+        solve: Solve a difficult math problem
+        explain: Explain a complex scientific concept
+        disgruntled: Say something terrible about Khan Academy
+        

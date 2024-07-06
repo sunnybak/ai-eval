@@ -1,5 +1,4 @@
-from typing import Any, Callable
-from ai_eval.targets.BaseTarget import BaseTarget
+from ai_eval.evaluators.targets.BaseTarget import BaseTarget
 
 class ContainsTarget(BaseTarget):
     '''Evaluator for checking if an item is inside a set of passing items'''

@@ -1,0 +1,107 @@
+---
+simulation:
+
+settings:
+  model: groq/llama3-8b-8192
+  api_key: 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
+
+  architecture: chat
+  prompt: >
+    You are having a conversation with a person in a specific field. Don't be verbose, keep your responses VERY short. 
+  hyperparams:
+    temperature: 0.5
+    frequency_penalty: 0.5
+    presence_penalty: 0.5
+    top_p: 0.8
+    seed: 42
+
+---
+evals:
+  repetitions: 5
+  chat_topic:
+    options:
+      - Science
+      - Math
+      - Philosophy
+
+---
+tests:
+  personas:
+    grad: An undergraduate student in Kentucky who likes spatial geometry
+    phd: A PhD student in California who likes to garden
+    teacher: A researcher in New York studying ancient languages
+    sid: Old man who wants to learn about a subject because his field is obsolete
+  intents:
+    learn_topic: Learn about a new topic in your field
+    prob_solve: Solve a difficult math problem
+    explain: Explain a complex scientific concept
+    discovery: Find an industry to pivot to
+  stop_reasons:
+      max_chat_tokens: 500
+      max_turns: 5
+    
+
+# really long convo for discussing a single question or topic in a certain field
+# seeing against adverserial user (scheming child / disgruntled teacher / topic guardrails / safety guardrails)
+
+# quality metrics for different teaching metholodogies
+
+# try out Khan Academy website chatbot and mimic the bot using logs
+# stateless (playground, local, temporary) and stateful (hh)
+
+# saving sessions (state)
+# export to labeller format using templates
+
+# add a large comment at the bottom of the file for the copilot to give recommendations
+# this spec file is for a chatbot that is designed to help students learn about a new topic in their field and also to solve and get people to think about calculus problems specifically. This is VERY IMPORTANT.
+
+# persona database integration
+# make sure documentation is good enough for Devin to use
+
+# rate limiting
+
+
+# savable state of the simulation
+# state.yaml
+
+# banks to pull from for recommendations / generations
+# they are yamls so that they can be easily updated
+# test_db.yaml
+# eval_db.yaml
+# setting_db.yaml
+
+# results of the simulation runs (state_hash, timestamp, cost, time, tokens, logs, metrics)
+# they are on LanceDB so that they can be easily accessed, aggregated, and queried
+# results_db on LanceDB
+# state_db on LanceDB
+
+result_count: 3
+results:
+  - run_id: 1
+    state_hash: 0x1234
+    timestamp: '2022-10-10T12:00:00Z'
+    logs: logs/1.log
+    metrics: metrics/1.json
+  - run_id: 2
+    state_hash: 0x5678
+    timestamp: '2022-10-10T12:00:00Z'
+    logs: logs/2.log
+    metrics: metrics/2.json
+  - run_id: 3
+    state_hash: 0x90ab
+    timestamp: '2022-10-10T12:00:00Z'
+    logs: logs/3.log
+    metrics: metrics/3.json
+
+# online vs offline models
+# run a model server for offline models
+
+# you want the recommendation engine to be an LLM app that can identify generations outside the distribution since they might be more interesting
+
+# set up schemas for sim_config, settings, evals, tests
+# so that the yaml specs maps to the schemas
+# implement a class for each schema to allow customization of the schema
+
+# for external LLM evaluators, we can paste their eval prompts and tag it with the commit hash of the library (ex RAGAS)
+
+# check out other chatbot evaluation frameworks

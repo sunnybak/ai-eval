@@ -1,4 +1,4 @@
-from ai_eval.scorers import AbsBaseScorer
+from ai_eval.evaluators.scorers import AbsBaseScorer
 import tiktoken
 
 class TokenScorer(AbsBaseScorer):
