@@ -1,25 +1,31 @@
 ---
 simulation:
-  model: llama3-8b-8192
-  groq_key: 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
 
 settings:
-  architecture: chat
-  prompt: You are having a conversation with a person in a specific field. Don't be verbose, keep your responses VERY short. 
-  model_hyperparams:
-    temperature: 0.5
-  stop_reasons:
-      max_chat_tokens: 500
-      max_turns: 5
+  model: groq/llama3-8b-8192
+  api_key: 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
 
+  architecture: chat
+  prompt: >
+    You are having a conversation with a person in a specific field. Don't be verbose, keep your responses VERY short. 
+  hyperparams:
+    temperature: 0.5
+    frequency_penalty: 0.5
+    presence_penalty: 0.5
+    top_p: 0.8
+    seed: 42
+
+---
 evals:
+  repetitions: 5
   chat_topic:
     options:
       - Science
       - Math
       - Philosophy
+
+---
 tests:
-  repetitions: 30
   personas:
     grad: An undergraduate student in Kentucky who likes spatial geometry
     phd: A PhD student in California who likes to garden
@@ -30,7 +36,9 @@ tests:
     prob_solve: Solve a difficult math problem
     explain: Explain a complex scientific concept
     discovery: Find an industry to pivot to
-
+  stop_reasons:
+      max_chat_tokens: 500
+      max_turns: 5
     
 
 # really long convo for discussing a single question or topic in a certain field
