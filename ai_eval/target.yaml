@@ -1,0 +1,26 @@
+---
+openai: &openai
+  model: openai/gpt-3.5-turbo
+  api_key: # paste
+
+groq: &groq
+  model: groq/llama3-8b-8192
+  api_key: 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
+
+app:
+    agent:
+        architecture: simple_chatbot
+        model_settings:
+            <<: *groq
+            hyperparams:
+              temperature: 0.9
+        system_prompt: >
+          Be good.
+
+evaluators:
+  topic_classifier:
+    inputs: state.messages
+    model_settings: *openai
+    params:
+      classes: [good, not good]
+    target: good
