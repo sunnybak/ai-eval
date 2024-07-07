@@ -1,0 +1,59 @@
+---
+defaults: &defaults # model spec
+    model: groq/llama3-8b-8192
+    api_key: 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
+    hyperparams:
+        temperature: 0.9
+
+app: # app spec
+    agent: # agent spec
+        architecture: SimpleChatbot # maps to a python module defined in current package under agents/
+        model_settings:
+            <<: *defaults
+            hyperparams: # overrides defaults
+                temperature: 0.5
+        input: state.messages
+        system_prompt: >
+            You should discuss an issue with the user.
+        stop_conditions: # 
+            max_chat_tokens: 500
+            max_inputs: 5
+            end_token: END
+        
+
+evaluators: # each evaluator maps to a python module defined in the current package under evaluators/
+
+    message_counter:
+
+    # scorer:
+    #     inputs: state.messages
+    #     model_settings: *openai
+    #     params:
+    #         classes: [good, not good]
+    #     guardrail:
+    #         pass_range: good
+    #         in_range: all
+
+simulations:
+    agent:
+        architecture: SimpleChatbot
+        model_settings: *defaults
+        system_prompt: >
+            Pretend to be an undergraduate student in Kentucky who likes spatial geometry. Discuss a random topic.
+        stop_func:
+            max_chat_tokens: 500
+            max_inputs: 5
+            end_token: END
+
+    personas: # key value map of different personas
+        grad: An undergraduate student in Kentucky who likes spatial geometry
+        phd: A PhD student in California who likes to garden
+        student: A researcher in New York studying ancient languages
+        disgruntled_teacher: A teacher fired from their job and disappointed with the system
+        
+    scenarios: # key value map of different scenarios
+        scheme: Talk about a random topic
+        solve: Solve a difficult math problem
+        explain: Explain a complex scientific concept
+        disgruntled: Say something terrible about Khan Academy
+        

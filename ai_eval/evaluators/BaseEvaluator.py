@@ -32,24 +32,19 @@ class BaseEvaluator(object):
 
         return result
 
-    async def __call__(self, *scorer_args: Any, **scorer_kwargs: Any) -> Any:
-        print('Scorer Args:', scorer_args)
-        # run the scorer
-        score = await self.scorer(*scorer_args, **scorer_kwargs)
-        score_obj = score if isinstance(score, Score) else Score(score)
-        self._scores.append(score_obj)
+    # async def __call__(self, *scorer_args: Any, **scorer_kwargs: Any) -> Any:
+    #     print('Scorer Args:', scorer_args)
+    #     # run the scorer
+    #     score = await self.scorer(*scorer_args, **scorer_kwargs)
+    #     score_obj = score if isinstance(score, Score) else Score(score)
+    #     self._scores.append(score_obj)
 
-        # run the target
-        result = self.target(score_obj.score)
-        self._results.append(result)
+    #     # run the target
+    #     result = self.target(score_obj.score)
+    #     self._results.append(result)
 
-        return result
+    #     return result
     
     def __contains__(self, score: Any) -> bool:
         return self.target.__contains__(score)
     
-    
-# create a base evaluator with 2 attributes mean and median
-if __name__ == '__main__':
-    e = BaseEvaluator(mean=0.5, median=0.6)
-    print(e.mean, e.median)
